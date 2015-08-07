@@ -1,4 +1,9 @@
 module.exports.create = function () {
+  var express = require('express');
+  var app = express();
+  var staticServer = express.static(__dirname + '/public');
+
+
   function handler(req, res) {
     var result = '';
     req.on('data', function (buffer) {
@@ -14,5 +19,12 @@ module.exports.create = function () {
     });
   }
 
-  return handler;
+  app.use('/', staticServer);
+
+  app.get('/api/messages', handler);
+  app.post('/api/messages', handler);
+  app.delete('/api/messages', handler);
+
+  //app.post('/api/messages', handler);
+  return app;
 };
